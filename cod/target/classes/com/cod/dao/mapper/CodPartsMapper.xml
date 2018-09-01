@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cod.dao.mapper.CodPartsMapper" >
+
+    <resultMap id="BaseResultMap" type="com.cod.entity.CodParts" >
+            <id column="id" property="id" jdbcType="INTEGER"  />
+            <result column="pid" property="pid" jdbcType="INTEGER"  />
+            <result column="title" property="title" jdbcType="VARCHAR" />
+            <result column="etitle" property="etitle" jdbcType="VARCHAR" />
+            <result column="zhdesc" property="zhdesc" jdbcType="VARCHAR" />
+            <result column="minprice" property="minprice" jdbcType="VARCHAR" />
+            <result column="maxprice" property="maxprice" jdbcType="VARCHAR" />
+            <result column="picture" property="picture" jdbcType="VARCHAR" />
+            <result column="sort" property="sort" jdbcType="INTEGER" />
+            <result column="status" property="status" jdbcType="INTEGER" />
+            <result column="createtime" property="createtime" jdbcType="DATE" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, pid, title, etitle, zhdesc, minprice, maxprice, picture, sort, status, createtime
+    </sql>
+
+    <select id="selectById" resultType="string" parameterType="int" >
+        select minprice
+        from cod_parts
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectminpricebyPid" resultMap="BaseResultMap" parameterType="int">
+        select
+        <include refid="Base_Column_List"/>
+        from cod_parts
+        where pid = #{pid,jdbcType=INTEGER} order by sort asc
+   </select>
+
+    <select id="selectMaxpriceById" resultType="string" parameterType="int" >
+        select maxprice
+        from cod_parts
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

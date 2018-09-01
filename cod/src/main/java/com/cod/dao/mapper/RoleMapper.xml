@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cod.dao.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.cod.entity.manage.Role">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="create_time" property="create_time" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+           id,name,create_time
+    </sql>
+    <!-- 新增 -->
+    <insert id="insert" parameterType="com.cod.entity.manage.Role">
+        insert into chart_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 新增角色菜单对应关系 -->
+    <insert id="insertRolefunc" parameterType="java.util.List">
+        insert into chart_rolefunc
+        (role_id, func_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.role_id,jdbcType=INTEGER},
+            #{item.func_id,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 新增用户角色对应关系 -->
+    <insert id="insertUserrole" parameterType="java.util.List">
+        insert into chart_userrole
+        (user_id, role_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.user_id,jdbcType=INTEGER},
+            #{item.role_id,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+
+    <!--查询出所有的角色-->
+    <select id="getAllRoles" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from chart_role
+    </select>
+
+    <!--依据用户id获取角色id-->
+    <select id="getRoleidByUserid" resultType="int">
+        select role_id
+        from chart_userrole
+        where user_id=#{user_id,jdbcType=INTEGER}
+    </select>
+
+    <!--依据用户id获取角色id-->
+    <select id="getFuncidByroleid" resultType="int">
+        select func_id
+        from chart_rolefunc
+        where role_id=#{role_id,jdbcType=INTEGER}
+    </select>
+
+    <!--依据role_id查询出funcid-->
+    <select id="findByRoleIds" resultType="Long" parameterType="java.util.List">
+        select func_id
+        from chart_rolefunc
+        where
+        role_id in
+        <foreach item="item" index="index" collection="roleids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <!-- 更新菜单信息 -->
+    <update id="updateRole" parameterType="com.cod.entity.manage.Role">
+        update chart_role
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteRoleById" parameterType="int">
+		delete from
+		chart_role
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+    <delete id="deleteUserRole" parameterType="int">
+		delete from
+		chart_userrole
+		where user_id = #{user_id,jdbcType=INTEGER}
+	</delete>
+
+    <delete id="deleteRoleFunc" parameterType="int">
+		delete from
+		chart_rolefunc
+		where role_id = #{role_id,jdbcType=INTEGER}
+	</delete>
+
+    <delete id="deleteRoleFuncByfuncid" parameterType="int">
+		delete from
+		chart_rolefunc
+		where func_id = #{func_id,jdbcType=INTEGER}
+	</delete>
+
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cod.dao.mapper.MycountMapper">
+    <resultMap id="BaseResultMap" type="com.cod.entity.manage.User">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="blgroup" property="blgroup" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+           id,username,password,phone,blgroup,status,ip
+    </sql>
+    <!-- 新增 -->
+    <insert id="insert" parameterType="com.cod.entity.manage.User">
+        insert into cod_admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="blgroup != null">
+                blgroup,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="ip != null">
+                ip,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="blgroup != null">
+                #{blgroup,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="ip != null">
+                #{ip,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="getMycount" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from cod_admin
+        where username = #{username,jdbcType=VARCHAR} and password=#{password,jdbcType=VARCHAR} and status=1
+    </select>
+
+    <select id="countUser" resultType="int" parameterType="java.util.Map">
+        select count(*) from cod_admin
+    </select>
+
+    <select id="getMycountByUsername" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List" />
+        from cod_admin
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+
+    <!--依据用户id获取角色id -->
+    <select id="getRoleByUserid" resultType="int" parameterType="int">
+        select role_id
+        from chart_userrole
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </select>
+
+
+    <!--查询出所有的mycount-->
+    <select id="getAllMycount" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cod_admin
+    </select>
+
+    <!--依据用户名查询出所在组-->
+    <select id="getTeamByUserName" parameterType="string" resultType="string">
+        select blgroup from cod_admin where username=#{username,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 更新账户信息 -->
+    <update id="updateMycount" parameterType="com.cod.entity.manage.User">
+        update mycount
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+
+
+    <!-- 新增用户数据对应关系 -->
+    <insert id="insertUserGroup" parameterType="java.util.List">
+        insert into chart_amoutdata
+        (team,user_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.groupName,jdbcType=VARCHAR},
+            #{item.user_id,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+    <!--依据用户id获取组名 -->
+    <select id="getGroupByUserid" resultType="String" parameterType="int">
+        select blgroup
+        from cod_admin
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </select>
+    <!--依据用户id获取所有组 -->
+    <select id="getGroupsByUserid" resultType="String" parameterType="int">
+        select team
+        from chart_amoutdata
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </select>
+    <!--查询出所有的group -->
+    <select id="getAllGroup"  resultType="String" >
+        select
+        DISTINCT blgroup
+        FROM cod_admin;
+    </select>
+    <select id="getUserByGroupName" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        where blgroup=#{#blgroup,jdbcType=VARCHAR}
+    </select>
+    <!--依据用户id删除用户与组对应关系-->
+    <delete id="deleteUserGroup" parameterType="int">
+        delete from
+        chart_amoutdata
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </delete>
+
+    <!--根据userid修改密码-->
+    <select id="updatePassByid" resultMap="BaseResultMap">
+        UPDATE cod_admin
+        <set>password = #{password,jdbcType=VARCHAR},</set>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+
+</mapper>

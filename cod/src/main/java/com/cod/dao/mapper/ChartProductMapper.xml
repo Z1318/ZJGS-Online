@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cod.dao.mapper.ChartProductMapper">
+    <resultMap id="BaseResultMap" type="com.cod.entity.chart.ChartProduct">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="team" property="team" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="sku" property="sku" jdbcType="VARCHAR"/>
+        <result column="person" property="person" jdbcType="VARCHAR"/>
+        <result column="fb_cost" property="fb_cost" jdbcType="FLOAT"/>
+        <result column="fb_income" property="fb_income" jdbcType="FLOAT"/>
+        <result column="order_num" property="order_num" jdbcType="INTEGER"/>
+        <result column="cart_num" property="cart_num" jdbcType="INTEGER"/>
+        <result column="show_num" property="show_num" jdbcType="INTEGER"/>
+        <result column="site_conversion" property="site_conversion" jdbcType="INTEGER"/>
+        <result column="singleResult" property="singleResult" jdbcType="FLOAT"/>
+        <result column="singleFree" property="singleFree" jdbcType="FLOAT"/>
+        <result column="launch_time" property="launch_time" jdbcType="DATE"/>
+        <result column="import_time" property="import_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,team,name,sku,person,fb_cost,fb_income,order_num,cart_num,show_num,site_conversion,singleResult,singleFree,launch_time,import_time
+    </sql>
+    <!--插入整条记录-->
+    <insert id="insert" parameterType="com.cod.entity.chart.ChartProduct">
+        insert INTO chart_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="team != null">
+                team,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="sku != null">
+                sku,
+            </if>
+            <if test="person != null">
+                person,
+            </if>
+            <if test="fb_cost != null">
+                fb_cost,
+            </if>
+            <if test="fb_income != null">
+                fb_income,
+            </if>
+            <if test="order_num != null">
+                order_num,
+            </if>
+            <if test="cart_num != null">
+                cart_num,
+            </if>
+            <if test="show_num != null">
+                show_num,
+            </if>
+            <if test="site_conversion != null">
+                site_conversion,
+            </if>
+            <if test="singleResult != null">
+                singleResult,
+            </if>
+            <if test="singleFree != null">
+                singleFree,
+            </if>
+            <if test="launch_time != null">
+                launch_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="team != null">
+                #{team,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sku != null">
+                #{sku,jdbcType=VARCHAR},
+            </if>
+            <if test="person != null">
+                #{person,jdbcType=VARCHAR},
+            </if>
+            <if test="fb_cost != null">
+                #{fb_cost,jdbcType=FLOAT},
+            </if>
+            <if test="fb_income != null">
+                #{fb_income,jdbcType=FLOAT},
+            </if>
+            <if test="order_num != null">
+                #{order_num,jdbcType=INTEGER},
+            </if>
+            <if test="cart_num != null">
+                #{cart_num,jdbcType=INTEGER},
+            </if>
+            <if test="show_num != null">
+                #{show_num,jdbcType=INTEGER},
+            </if>
+            <if test="site_conversion != null">
+                #{site_conversion,jdbcType=INTEGER},
+            </if>
+            <if test="singleResult != null">
+                #{singleResult,jdbcType=FLOAT},
+            </if>
+            <if test="singleFree != null">
+                #{singleFree,jdbcType=FLOAT},
+            </if>
+            <if test="launch_time != null">
+                #{launch_time,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchinsert" parameterType="java.util.List">
+        insert into chart_product
+        (team,name,sku,person,fb_cost,fb_income,order_num,cart_num,show_num,site_conversion,singleResult,singleFree,launch_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.team,jdbcType=VARCHAR},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.sku,jdbcType=VARCHAR},
+            #{item.person,jdbcType=VARCHAR},
+            #{item.fb_cost,jdbcType=FLOAT},
+            #{item.fb_income,jdbcType=FLOAT},
+            #{item.order_num,jdbcType=INTEGER},
+            #{item.cart_num,jdbcType=INTEGER},
+            #{item.show_num,jdbcType=INTEGER},
+            #{item.site_conversion,jdbcType=INTEGER},
+            #{item.singleResult,jdbcType=FLOAT},
+            #{item.singleFree,jdbcType=FLOAT},
+            #{item.launch_time,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <!--根据name查询-->
+    <select id="getProductByName" parameterType="String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM chart_product
+        WHERE name = #{name,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据组名称和时间查询-->
+    <select id="getProductByTeamAndLaunchTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM chart_product
+        WHERE team = #{team,jdbcType=VARCHAR} and launch_time = #{launch_time,jdbcType=DATE}
+    </select>
+    <!--根据组名称查询-->
+    <select id="getProductByTeam" parameterType="String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM chart_product
+        WHERE team = #{team,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据组名和投放时间删除记录-->
+    <delete id="delProductByTeamAndLaunchTime" parameterType="java.util.Map">
+        delete from
+        chart_product
+        where team = #{team,jdbcType=VARCHAR} AND launch_time = #{launch_time,jdbcType=DATE}
+    </delete>
+
+    <select id="selectMaxDate" parameterType="string" resultType="string">
+        select max(launch_time) from chart_product where team=#{team,jdbcType=VARCHAR}
+
+    </select>
+
+    <!--依据投放人和投放时间查询出商品sku-->
+    <select id="selectSkuByLaunchTimeAndPerson" parameterType="java.util.Map" resultType="string">
+        select sku
+        from chart_product
+        where launch_time=#{launch_time,jdbcType=VARCHAR} AND person=#{person,jdbcType=VARCHAR}
+    </select>
+
+    <!--依据商品sku和投放时间获取商品初始导入数据-->
+    <select id="selectChartProductBySkuAndLaunchTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM chart_product
+        where launch_time=#{launch_time,jdbcType=VARCHAR}
+        AND sku=#{sku,jdbcType=VARCHAR}
+        AND team=#{team,jdbcType=VARCHAR}
+    </select>
+
+     <!--依据组名查询出所有的商品sku-->
+    <select id="selectSkuByLaunchTime" parameterType="java.util.Map" resultType="string">
+        select distinct sku from chart_product where launch_time=#{launch_time,jdbcType=DATE} AND team=#{team,jdbcType=VARCHAR}
+    </select>
+
+
+    <!-- 更新产品信息 -->
+    <update id="updateById" parameterType="com.cod.entity.chart.ChartProduct">
+        update chart_product
+        <set>
+            <if test="team != null">
+                team = #{team,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sku != null">
+                sku = #{sku,jdbcType=VARCHAR},
+            </if>
+            <if test="person != null">
+                person = #{sku,jdbcType=VARCHAR},
+            </if>
+            <if test="fb_cost != null">
+                fb_cost = #{fb_cost,jdbcType=FLOAT},
+            </if>
+            <if test="fb_income != null">
+                fb_income = #{fb_income,jdbcType=FLOAT},
+            </if>
+            <if test="order_num != null">
+                order_num = #{order_num,jdbcType=INTEGER},
+            </if>
+            <if test="cart_num != null">
+                cart_num = #{cart_num,jdbcType=INTEGER},
+            </if>
+            <if test="show_num != null">
+                show_num = #{show_num,jdbcType=INTEGER},
+            </if>
+            <if test="site_conversion != null">
+                site_conversion = #{site_conversion,jdbcType=INTEGER},
+            </if>
+            <if test="singleResult != null">
+                singleResult = #{singleResult,jdbcType=INTEGER},
+            </if>
+            <if test="singleFree != null">
+                singleFree = #{singleFree,jdbcType=INTEGER},
+            </if>
+            <if test="launch_time != null">
+                launch_time = #{launch_time,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectGroupNameByLaunchTime" parameterType="string" resultType="string">
+           select distinct team from chart_product where launch_time=#{launch_time,jdbcType=DATE}
+    </select>
+
+    <!--  获取最大日期   zyp-->
+    <select id="selectMaxLaunchTime" resultType="String" parameterType="String">
+        SELECT
+        MAX(launch_time)
+        FROM
+        chart_product
+    </select>
+
+    <!-- 依据 投放时间获取商品 fb_cost/sku     zyp -->
+    <select id="getFB_CostAndSKUByLaunchTime" parameterType="String" resultMap="BaseResultMap">
+        select
+        sku,fb_cost
+        FROM chart_product
+        where launch_time=#{launchTime,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cod.dao.mapper.ExchangerateMapper">
+    <resultMap id="BaseResultMap" type="com.cod.entity.Exchangerate">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="counrty" property="counrty" jdbcType="VARCHAR" />
+        <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+        <result column="logistics" property="logistics" jdbcType="VARCHAR" />
+        <result column="exchangerate" property="exchangerate" jdbcType="VARCHAR" />
+        <result column="refusalrate" property="refusalrate" jdbcType="VARCHAR" />
+        <result column="fees" property="fees" jdbcType="VARCHAR" />
+        <result column="feesfix" property="feesfix" jdbcType="VARCHAR" />
+        <result column="vat" property="vat" jdbcType="VARCHAR" />
+        <result column="realpromotion" property="realpromotion" jdbcType="VARCHAR" />
+        <result column="deliveryfee" property="deliveryfee" jdbcType="VARCHAR" />
+        <result column="freight" property="freight" jdbcType="VARCHAR" />
+        <result column="updatemessage" property="updatemessage" jdbcType="VARCHAR" />
+        <result column="addtime" property="addtime" jdbcType="VARCHAR" />
+        <result column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+        <result column="adduser" property="adduser" jdbcType="VARCHAR" />
+        <result column="uptateuser" property="uptateuser" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,counrty,abbreviation,logistics,exchangerate,refusalrate,fees,feesfix,vat,realpromotion,deliveryfee,freight,updatemessage,addtime,updatetime,adduser,uptateuser
+    </sql>
+
+    <select id="getExchangerateById" resultMap="BaseResultMap" parameterType="INT">
+        select
+        <include refid="Base_Column_List" />
+        from cod_exchangerate
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+</mapper>

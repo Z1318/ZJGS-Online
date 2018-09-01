@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- creat by ZYP -->
+<!--  date 2018/06/06 -->
+<mapper namespace="com.cod.dao.mapper.OrderCountMapper">
+    <resultMap id="BaseResultMap" type="com.cod.entity.Order">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+        <result column="num" property="num" jdbcType="VARCHAR" />
+        <result column="size" property="size" jdbcType="VARCHAR" />
+        <result column="payprice" property="payprice" jdbcType="VARCHAR" />
+        <result column="orderid" property="orderid" jdbcType="VARCHAR" />
+        <result column="uname" property="uname" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="zcode" property="zcode" jdbcType="VARCHAR" />
+        <result column="payway" property="payway" jdbcType="VARCHAR" />
+        <result column="location_p" property="location_p" jdbcType="VARCHAR" />
+        <result column="location_c" property="location_c" jdbcType="VARCHAR" />
+        <result column="location_a" property="location_a" jdbcType="VARCHAR" />
+        <result column="location_d" property="location_d" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="checkstatus" property="checkstatus" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="istory" property="istory" jdbcType="VARCHAR" />
+        <result column="optuid" property="optuid" jdbcType="INTEGER" />
+        <result column="recoid" property="recoid" jdbcType="VARCHAR" />
+        <result column="postnum" property="postnum" jdbcType="VARCHAR" />
+        <result column="posttype" property="posttype" jdbcType="VARCHAR" />
+        <result column="postid" property="postid" jdbcType="VARCHAR" />
+        <result column="poststate" property="poststate" jdbcType="VARCHAR" />
+        <result column="teluser" property="teluser" jdbcType="VARCHAR" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" />
+        <result column="stop_date" property="stop_date" jdbcType="DATE" />
+        <result column="createtime" property="createtime" jdbcType="DATE" />
+        <result column="update_order_time" property="update_order_time" jdbcType="DATE" />
+        <result column="receptionid" property="receptionid" jdbcType="INTEGER" />
+        <result column="ordernumber" property="ordernumber" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="orderCountInfo" type="com.cod.entity.tmp.OrderCountInfo">
+        <result column="payPrice" property="payPrice" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="groupName" property="groupName" jdbcType="VARCHAR" />
+        <result column="exchangerate" property="exchangerate" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="pId" property="pId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, pid, num, size, payprice, orderid, uname, phone, email, zcode, payway, location_p,
+        location_c, location_a, location_d, address, message, remark, checkstatus, status,
+        istory, optuid, recoid, postnum, posttype, postid, poststate, teluser, ip, stop_date,
+        createtime, update_order_time, receptionid, ordernumber
+    </sql>
+
+        <select id="selectMaxDate" resultType="String" parameterType="String">
+                SELECT
+                MAX(createtime)
+                FROM
+                cod_order
+        </select>
+
+    <!--  ��ȡ payPrice/����/����״̬/���/pid �����ϲ�ѯ -->
+    <select id="getOrderCountInfo" parameterType="java.util.Map" resultMap="orderCountInfo">
+    select
+          a.payprice as payprice,a.status as status,c.blgroup as groupName,e.exchangerate as exchangerate
+    from
+          cod_order as a,cod_product as b,cod_admin as c,cod_exchangerate_domain as d,cod_exchangerate as e
+    where
+          a.pid=b.id AND b.uid = c.id and b.domainname = d.domainname and d.eid = e.id
+    AND a.createtime >= #{date,jdbcType=DATE}
+    AND a.createtime &lt; #{specifiedDayAfter,jdbcType=DATE}
+    </select>
+
+    <!--  ���ͳ�����ϲ�ѯ -->
+    <select id="getCountByCountry" parameterType="java.util.Map" resultMap="orderCountInfo">
+        select
+        a.payprice AS payprice,
+        a.STATUS AS STATUS,
+        a.pid AS pId,
+        e.exchangerate AS exchangerate,
+        e.counrty AS country
+        from
+        cod_order as a,cod_product as b,cod_admin as c,cod_exchangerate_domain as d,cod_exchangerate as e
+        where
+        a.pid=b.id AND b.uid = c.id and b.domainname = d.domainname and d.eid = e.id
+        AND a.createtime >= #{date,jdbcType=DATE}
+        AND a.createtime &lt; #{specifiedDayAfter,jdbcType=DATE}
+    </select>
+
+<!-- ��ȡ������ -->
+    <select id="getCountryName" resultType="String">
+        SELECT DISTINCT counrty from cod_exchangerate
+    </select>
+</mapper> 

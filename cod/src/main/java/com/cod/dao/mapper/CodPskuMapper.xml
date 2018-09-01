@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- creat by ZYP -->
+<!-- date 2018/06/05 -->
+<mapper namespace="com.cod.dao.mapper.CodPskuMapper" >
+
+    <resultMap id="BaseResultMap" type="com.cod.entity.CodPsku">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="libpsku" property="libpsku" jdbcType="VARCHAR"/>
+        <result column="dxmpsku" property="dxmpsku" jdbcType="VARCHAR"/>
+        <result column="buyrmb" property="buyrmb" jdbcType="VARCHAR"/>
+        <result column="pname" property="pname" jdbcType="VARCHAR"/>
+        <result column="ename" property="ename" jdbcType="VARCHAR"/>
+        <result column="pweight" property="pweight" jdbcType="VARCHAR"/>
+        <result column="pshow" property="pshow" jdbcType="VARCHAR"/>
+        <result column="picurl" property="picurl" jdbcType="VARCHAR"/>
+        <result column="buyurl" property="buyurl" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="BIT"/>
+        <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+        <result column="uname" property="uname" jdbcType="DATE"/>
+        <result column="message" property="message" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, libpsku, dxmpsku, buyrmb, pname, ename, pweight, pshow, picurl, buyurl, status,
+         updatetime,uname, message
+    </sql>
+    <select id="selectBySku" resultMap="BaseResultMap" parameterType="String" >
+        select
+        <include refid="Base_Column_List"/>
+        from cod_psku
+        where libpsku = #{libpsku,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

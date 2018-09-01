@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cod.dao.mapper.CodProductMapper" >
+    <resultMap id="BaseResultMap" type="com.cod.entity.CodProduct" >
+        <constructor >
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="tempname" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="recoid" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="domainname" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="mastertype" jdbcType="BIT" javaType="java.lang.Boolean" />
+            <arg column="mastername" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="paytype" jdbcType="BIT" javaType="java.lang.Boolean" />
+            <arg column="uid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="currentpage" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="title" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="cnname" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="prosource" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="psourcelink" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="adsplayed" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="estimatesale" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="userview" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="goodstype" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="showtype" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="categoryid" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="discountdesc" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="price" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="commentnum" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="pricedown" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="pricedesc" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="pageviews" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="semail" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="fbnum" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="twnum" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="ganum" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+            <arg column="optuid" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="createtime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+            <arg column="updatetime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, tempname, recoid, domainname, mastertype, mastername, paytype, uid, currentpage,
+        title, cnname, prosource, psourcelink, adsplayed, estimatesale, userview, goodstype,
+        showtype, categoryid, discountdesc, price, commentnum, pricedown, pricedesc, pageviews,
+        semail, fbnum, twnum, ganum, status, optuid, createtime, updatetime
+    </sql>
+
+    <select id="selectByProductId" resultType="String" parameterType="int" >
+        select
+        domainname
+        from cod_product
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectProductIdByBlgroup" resultType="int" parameterType="java.util.List" >
+        select
+        id
+        from cod_product
+        where uid IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+
+
+
+</mapper>
